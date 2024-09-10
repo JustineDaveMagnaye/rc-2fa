@@ -1,11 +1,12 @@
 package com.two.factor.authentication.data.dao.authentication.impl;
 
+import com.employee.info.mgmt.data.connection.ConnectionHelper;
 import com.two.factor.authentication.appl.model.authentication.Authentication;
-import com.two.factor.authentication.data.connectionhelper.ConnectionHelper;
 import com.two.factor.authentication.data.dao.authentication.AuthenticationDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static com.two.factor.authentication.data.utils.QueryConstants.*;
@@ -13,18 +14,45 @@ import static com.two.factor.authentication.data.utils.QueryConstants.*;
 public class AuthenticationDaoImpl implements AuthenticationDao {
 
     @Override
-    public boolean validateOTP(Authentication authentication) {
-        try (Connection connection = ConnectionHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(VALIDATE_OTP_STATEMENT)) {
-            preparedStatement.setString(1, authentication.getEmployee_number());
-            preparedStatement.setString(2, authentication.getOTP());
-            preparedStatement.setTimestamp(3, authentication.getCreated_at());
+    public Authentication findEmployeeNo(String employeeNo) {
+        Authentication authentication = null;
 
-            int affectedRows = preparedStatement.executeUpdate();
-            return affectedRows > 0;
+        try (Connection connection = ConnectionHelper.getConnection())
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_EMPLOYEE_NO_STATEMENT);
+            preparedStatement.setString(1, employeeNo);
 
-        } catch (SQLException ex) {
-            return false;
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    authentication = new Authentication();
+                    authentication.setId(resultSet.getInt("id"));
+                    authentication.setEmployeeNo(resultSet.getString("employee_no"));
+                    authentication.setAuthenticationCode(resultSet.getString("authenticator_code"));
+                    return authentication;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+        System.out.println("Failed to find employee number.");
+        return authentication;
+    }
+
+    @Override
+    public Boolean validateAuthenticatorCode(String employeeNo, String authenticatorCode){
+        try(Connection connection = ConnectionHelper.getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement(VALIDATE_AUTHENTICATOR_CODE);
+            preparedStatement.setString(1, employeeNo);
+            preparedStatement.setString(2, authenticatorCode);
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+                if(resultSet.next()){
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 }

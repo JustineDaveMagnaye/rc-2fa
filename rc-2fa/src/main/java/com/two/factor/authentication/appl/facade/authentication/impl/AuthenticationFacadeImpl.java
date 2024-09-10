@@ -10,11 +10,12 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     public AuthenticationFacadeImpl(AuthenticationDao authenticationDao) {this.authenticationDao = authenticationDao;}
 
     @Override
-    public boolean validateOTP(Authentication authentication) throws RuntimeException{
-        try {
-            return authenticationDao.validateOTP(authentication);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to add authentication", e);
-        }
+    public Authentication findEmployeeNo(String employeeNo) throws RuntimeException{
+            return authenticationDao.findEmployeeNo(employeeNo);
+    }
+
+    @Override
+    public Boolean validateAuthenticatorCode(String employeeNo, String authenticatorCode) throws RuntimeException{
+        return authenticationDao.validateAuthenticatorCode(employeeNo, authenticatorCode);
     }
 }

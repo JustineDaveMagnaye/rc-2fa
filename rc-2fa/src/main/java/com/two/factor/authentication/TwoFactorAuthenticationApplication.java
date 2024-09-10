@@ -16,5 +16,19 @@ public class TwoFactorAuthenticationApplication {
     public AuthenticationFacade getAuthenticationFacade() {
         return authenticationFacade;
     }
+
+    public void executeRandomChallenge() {
+        int challengeId = (int)(Math.random() * 5);
+        switch (challengeId){
+            case 1:
+
+                break;
+            case 2:
+                break;
+            default:
+                break;
+
+        }
+    }
 }
 
