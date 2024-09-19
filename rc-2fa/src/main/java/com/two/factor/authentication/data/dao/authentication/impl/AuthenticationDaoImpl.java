@@ -1,6 +1,6 @@
 package com.two.factor.authentication.data.dao.authentication.impl;
 
-import com.employee.info.mgmt.data.connection.ConnectionHelper;
+import com.two.factor.authentication.data.connectionhelper.ConnectionHelper;
 import com.two.factor.authentication.appl.model.authentication.Authentication;
 import com.two.factor.authentication.data.dao.authentication.AuthenticationDao;
 
@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.two.factor.authentication.data.utils.QueryConstants.*;
+import static com.two.factor.authentication.data.utils.AuthenticatorQueryConstants.*;
 
 public class AuthenticationDaoImpl implements AuthenticationDao {
 
@@ -55,4 +55,23 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
         }
         return false;
     }
+
+    @Override
+    public Boolean validateSecretPhrase(int employeeId, String secretPhrase) {
+        try(Connection connection = ConnectionHelper.getConnection()){
+            PreparedStatement preparedStatement = connection.prepareStatement(VALIDATE_SECRET_PHRASE);
+            preparedStatement.setInt(1, employeeId);
+            preparedStatement.setString(2, secretPhrase);
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+                if(resultSet.next()){
+                    return true;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
 }

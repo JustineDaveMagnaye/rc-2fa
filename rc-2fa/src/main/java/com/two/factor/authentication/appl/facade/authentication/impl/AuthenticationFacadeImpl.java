@@ -18,4 +18,9 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     public Boolean validateAuthenticatorCode(String employeeNo, String authenticatorCode) throws RuntimeException{
         return authenticationDao.validateAuthenticatorCode(employeeNo, authenticatorCode);
     }
+
+    @Override
+    public Boolean validateSecretPhrase(int employeeId, String secretPhrase) throws RuntimeException{
+        return authenticationDao.validateSecretPhrase(employeeId, secretPhrase);
+    }
 }

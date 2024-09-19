@@ -6,4 +6,6 @@ public interface AuthenticationDao {
     Authentication findEmployeeNo(String employeeNo);
 
     Boolean validateAuthenticatorCode(String employeeNo, String authenticatorCode);
+
+    Boolean validateSecretPhrase(int employeeId, String secretPhrase);
 }
