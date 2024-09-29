@@ -7,5 +7,6 @@ public interface AuthenticationFacade {
 
     Boolean validateAuthenticatorCode(String employeeNo, String authenticatorCode) throws RuntimeException;
 
-    Boolean validateSecretPhrase(int employeeId, String secretPhrase) throws RuntimeException;
+    Boolean validateSecretPhrase(String EmployeeNo, String secretPhrase) throws RuntimeException;
+
 }

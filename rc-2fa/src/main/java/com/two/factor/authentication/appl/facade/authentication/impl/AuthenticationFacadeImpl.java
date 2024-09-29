@@ -2,6 +2,8 @@ package com.two.factor.authentication.appl.facade.authentication.impl;
 
 import com.two.factor.authentication.appl.facade.authentication.AuthenticationFacade;
 import com.two.factor.authentication.appl.model.authentication.Authentication;
+import com.two.factor.authentication.appl.model.employee.Employee;
+import com.two.factor.authentication.appl.model.randomQuestion.randomQuestion;
 import com.two.factor.authentication.data.dao.authentication.AuthenticationDao;
 
 public class AuthenticationFacadeImpl implements AuthenticationFacade {
@@ -20,7 +22,10 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     }
 
     @Override
-    public Boolean validateSecretPhrase(int employeeId, String secretPhrase) throws RuntimeException{
+    public Boolean validateSecretPhrase(String EmployeeNo, String secretPhrase) throws RuntimeException{
+        Authentication authentication = findEmployeeNo(EmployeeNo);
+        int employeeId = authentication.getId();
         return authenticationDao.validateSecretPhrase(employeeId, secretPhrase);
     }
+
 }

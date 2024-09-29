@@ -16,19 +16,16 @@ public class randomQuestion {
     public randomQuestion(){
     }
 
+    public randomQuestion(String questionType, String questionAnswer) {
+        this.questionType = questionType;
+        this.questionAnswer = questionAnswer;
+    }
+
     public String getQuestionType() {
         return questionType;
     }
 
-    public void setQuestionType(String questionType) {
-        this.questionType = questionType;
-    }
-
     public String getQuestionAnswer() {
         return questionAnswer;
-    }
-
-    public void setQuestionAnswer(String questionAnswer) {
-        this.questionAnswer = questionAnswer;
     }
 }

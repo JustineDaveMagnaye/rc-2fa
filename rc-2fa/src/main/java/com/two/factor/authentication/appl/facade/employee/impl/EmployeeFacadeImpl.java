@@ -5,6 +5,7 @@ package com.two.factor.authentication.appl.facade.employee.impl; /**
 
 import com.two.factor.authentication.appl.facade.employee.EmployeeFacade;
 import com.two.factor.authentication.appl.model.employee.Employee;
+import com.two.factor.authentication.appl.model.randomQuestion.randomQuestion;
 import com.two.factor.authentication.data.dao.employee.dao.EmployeeDao;
 
 import java.util.List;
@@ -60,7 +61,6 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
         return result;
     }
 
-
     @Override
     public boolean updateEmployee(Employee employee) throws RuntimeException {
         try {
@@ -73,4 +73,7 @@ public class EmployeeFacadeImpl implements EmployeeFacade {
             throw new RuntimeException("Error updating employee", e);
         }
     }
+
+
+
 }

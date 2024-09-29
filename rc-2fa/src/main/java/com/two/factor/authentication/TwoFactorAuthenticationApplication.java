@@ -17,6 +17,10 @@ import com.two.factor.authentication.appl.model.randomQuestion.randomQuestion;
 import com.two.factor.authentication.data.dao.user.dao.UserDao;
 import com.two.factor.authentication.data.dao.user.dao.impl.UserDaoImpl;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 public class TwoFactorAuthenticationApplication {
 
     private AuthenticationFacade authenticationFacade;
@@ -43,25 +47,15 @@ public class TwoFactorAuthenticationApplication {
     }
 
     public randomQuestion executeRandomChallenge(String employeeId) {
-        int challengeId = (int)(Math.random() * 2);
-        randomQuestion rQ = new randomQuestion();
         Employee employee = employeeFacade.getEmployeeById(employeeId);
-        String question = "";
-        switch (challengeId){
-            case 0:
-                rQ.setQuestionAnswer(employee.getBirthplace());
-                rQ.setQuestionType("Birthplace");
-                break;
-            case 1:
-                rQ.setQuestionAnswer(employee.getBirthdate().toString());
-                rQ.setQuestionType("Birthdate");
-                break;
-            case 2:
-                rQ.setQuestionAnswer(employee.getMiddleName());
-                rQ.setQuestionType("MiddleName");
-                break;
-        }
-        return rQ;
+        List<Function<Employee, randomQuestion>> challengeFunctions = Arrays.asList(
+                e -> new randomQuestion("Birthplace", e.getBirthplace()),
+                e -> new randomQuestion("Birthdate", e.getBirthdate().toString()),
+                e -> new randomQuestion("MiddleName", e.getMiddleName())
+        );
+
+        int challengeId = (int)(Math.random() * challengeFunctions.size());
+        return challengeFunctions.get(challengeId).apply(employee);
     }
 
     public Boolean validateLoginID(String EmployeeNumber){
